@@ -1,0 +1,31 @@
+[package]
+name = "ssr-learning"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "ssr_router_hydrate"
+required-features = ["hydration"]
+
+[[bin]]
+name = "ssr_router_server"
+required-features = ["ssr"]
+
+[dependencies]
+futures = { version = "0.3.30", features = ["std"], default-features = false }
+yew = { version = "0.21.0", features = ["csr", "hydration", "ssr"] }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+tokio = { version = "1.39.3", features = ["macros", "rt-multi-thread"] }
+axum = "0.7.5"
+axum-server = { version = "0.7.1", features = ["tls-rustls"] }
+tower = { version = "0.4", features = ["make"] }
+tower-http = { version = "0.5.2", features = ["fs"] }
+clap = { version = "4.5.16", features = ["derive"] }
+hyper = { version = "1.4.1", features = ["server", "http1"] }
+
+[features]
+ssr = ["yew/ssr"]
+hydration = ["yew/hydration"]
