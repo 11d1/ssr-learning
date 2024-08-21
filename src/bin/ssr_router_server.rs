@@ -1,3 +1,5 @@
+use ssr_learning::{ServerApp, ServerAppProps};
+
 use std::{collections::HashMap, convert::Infallible, future::Future, net::SocketAddr, path::PathBuf};
 
 use axum::{body::Body, extract::{Query, State}, handler::HandlerWithoutStateExt, http::Uri, response::IntoResponse, routing::{get, Route}, Router};
@@ -17,12 +19,15 @@ struct Opt {
 
 async fn render(
     url: Uri,
-    // Query(queries): Query<HashMap<String, String>>,
+    Query(queries): Query<HashMap<String, String>>,
     State((index_html_before, index_html_after)): State<(String, String)>
 ) -> impl IntoResponse {
     let url = url.to_string();
 
-    let renderer = yew::ServerRenderer::<App>::new();
+    let renderer = yew::ServerRenderer::<ServerApp>::with_props(move || ServerAppProps {
+        uri: url.into(),
+        queries,
+    });
 
     Body::from_stream(
         stream::once(async move { index_html_before })

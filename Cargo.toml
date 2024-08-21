@@ -4,6 +4,10 @@ version = "0.1.0"
 edition = "2021"
 
 [[bin]]
+name = "function_router"
+required-features = ["csr"]
+
+[[bin]]
 name = "ssr_router_hydrate"
 required-features = ["hydration"]
 
@@ -14,9 +18,13 @@ required-features = ["ssr"]
 [dependencies]
 futures = { version = "0.3.30", features = ["std"], default-features = false }
 yew = { version = "0.21.0", features = ["csr", "hydration", "ssr"] }
+yew-router = "0.18.0"
 
+# Frontend
 [target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen-futures = "0.4.43"
 
+# Server
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 tokio = { version = "1.39.3", features = ["macros", "rt-multi-thread"] }
 axum = "0.7.5"
@@ -29,3 +37,4 @@ hyper = { version = "1.4.1", features = ["server", "http1"] }
 [features]
 ssr = ["yew/ssr"]
 hydration = ["yew/hydration"]
+csr = ["yew/csr"]
