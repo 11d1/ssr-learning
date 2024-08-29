@@ -1,5 +1,5 @@
 [package]
-name = "ssr-learning"
+name = "ssr-learning-axum-yew"
 version = "0.1.0"
 edition = "2021"
 
